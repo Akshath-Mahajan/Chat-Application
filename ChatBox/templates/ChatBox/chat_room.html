@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Welcome {{user}}</h1>
+    <ul id="all-msgs">
+        
+    </ul>
+    <form id="form">
+        <input id="msg-txt" type="text">
+        <input id="send-msg" type="submit">
+    </form>
+</body>
+<script>
+    var loc = window.location
+    var formData = document.getElementById('form')
+    var wsStart = 'ws://'
+    if(loc.protocol == "https:"){wsStart = "wss://"}
+    var endpoint = wsStart+loc.host+loc.pathname
+    var chatSocket = new WebSocket(endpoint)
+    chatSocket.onmessage = function(e){
+        console.log('onmessage', e)
+    }
+    chatSocket.onerror = function(e){
+        console.log('onerror', e)
+    }
+    chatSocket.onopen = function(e){
+        console.log('onopen', e)
+    }
+    chatSocket.onclose = function(e){
+        console.log('onclose', e)
+    }
+    document.getElementById("send-msg").onclick = function(e){
+        e.preventDefault()
+        console.log("Click")
+        var msgTxt = document.getElementById("msg-txt").value
+        if(msgTxt != '')
+        {document.getElementById('all-msgs').innerHTML+='<li>'+msgTxt+'</li>'}
+        document.getElementById('msg-txt').value = ""
+        chatSocket.send(msgTxt)
+    }
+</script>
+</html>
