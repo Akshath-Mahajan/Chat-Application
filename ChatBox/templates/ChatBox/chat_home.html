@@ -1,4 +1,3 @@
-{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,18 +11,15 @@
 </head>
 <body>
     <div class="container">
-    <h1>Welcome {{user}}, you are now talking to {{u}}</h1>
-        <ul id="all-msgs" class="list-group my-3">
-            <li class="list-group-item text-center"><h2>Chats</h2></li>
-            {%for msg in msgs%}
-                <li class="list-group-item"><strong>{{msg.user.username}}</strong>: {{msg.text}}</li>
+        <ul class="list-group">
+            {%for user in sent_users%}
+                <a href="{%url 'chat_room' user.username%}">
+                <li class="list-group-item">
+                    <h3>{{user.username}}</h3>
+                </li>
+                </a>
             {%endfor%}
         </ul>
-        <form id="form">
-            <input id="msg-txt" type="text">
-            <input id="send-msg" class="btn btn-success" type="submit"> 
-        </form>
     </div>
 </body>
-<script src="{%static 'chat_script.js'%}"></script>
 </html>

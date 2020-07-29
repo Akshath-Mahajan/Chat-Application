@@ -14,19 +14,17 @@ class ThreadManager(models.Manager):
             new_obj = Thread(user_one=user1, user_two=user2)
             new_obj.save()
             return new_obj
-
+    def get_all_chats(self, thread):
+        return ChatMessage.objects.filter(thread=thread)
 class Thread(models.Model):
     user_one = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_one')
     user_two = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_two')
     UID = models.TextField(default="")
+    is_valid = models.BooleanField(default=True)
     objects = ThreadManager()
-    # def save(self):
-    #     mask = hashlib.sha256()
-    #     string = self.user_one.username+self.user_two.username
-    #     mask.update(string.encode())
-    #     self.UID = mask.hexdigest()
-    #     print(len(self.UID))
-    #     super.save(self)
+    #def save(self):
+    # if any users are blocked then turn isvalid to false
+    # if user1 not related to user2 and openmessging is false then turn isvalid to false
 class ChatMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, default=None, blank=True, null=True)
