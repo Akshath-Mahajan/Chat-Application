@@ -3,7 +3,7 @@ var formData = document.getElementById('form')
 var wsStart = 'ws://'
 if(loc.protocol == "https:"){wsStart = "wss://"}
 var endpoint = wsStart+loc.host+loc.pathname
-var chatSocket = new WebSocket(endpoint)
+var chatSocket = new ReconnectingWebSocket(endpoint)
 chatSocket.onmessage = function(e){
     e = JSON.parse(e.data)
     var msg = e['text']
@@ -11,7 +11,6 @@ chatSocket.onmessage = function(e){
     document.getElementById('all-msgs').innerHTML+='<li class="list-group-item"><strong>'+username+"</strong>: "+msg+'</li>'
 }
 chatSocket.onerror = function(e){
-    console.error('Error:', e)
 }
 chatSocket.onopen = function(e){
 }
